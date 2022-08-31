@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_today"
+        android:icon="@drawable/ic_baseline_calendar_today_24"
+        android:title="@string/title_today" />
+    <item
+        android:id="@+id/navigation_garden"
+        android:icon="@drawable/ic_baseline_garden"
+        android:title="@string/title_garden" />
+    <item
+        android:id="@+id/navigation_identify"
+        android:icon="@drawable/ic_baseline_camera_24"
+        android:title="@string/title_identify" />
+    <item
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="@string/title_settings" />
+</menu>

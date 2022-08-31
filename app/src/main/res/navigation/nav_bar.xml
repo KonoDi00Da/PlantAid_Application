@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_bar"
+    app:startDestination="@id/module_Today">
+
+    <fragment
+        android:id="@+id/module_Today"
+        android:name="com.example.plantaid_application.Module_Today"
+        android:label="fragment_module__today"
+        tools:layout="@layout/fragment_module__today" />
+    <fragment
+        android:id="@+id/module_Mygarden"
+        android:name="com.example.plantaid_application.Module_Mygarden"
+        android:label="fragment_module__mygarden"
+        tools:layout="@layout/fragment_module__mygarden" />
+    <fragment
+        android:id="@+id/module_Identify_Plant"
+        android:name="com.example.plantaid_application.Module_Identify_Plant"
+        android:label="fragment_module__identify__plant"
+        tools:layout="@layout/fragment_module__identify__plant" />
+    <fragment
+        android:id="@+id/module_Settings"
+        android:name="com.example.plantaid_application.Module_Settings"
+        android:label="fragment_module__settings"
+        tools:layout="@layout/fragment_module__settings" />
+</navigation>
