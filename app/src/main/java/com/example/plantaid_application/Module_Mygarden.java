@@ -1,5 +1,6 @@
 package com.example.plantaid_application;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +26,7 @@ public class Module_Mygarden extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private FloatingActionButton floatingActionButton;
 
     public Module_Mygarden() {
         // Required empty public constructor
@@ -59,6 +63,17 @@ public class Module_Mygarden extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_module__mygarden, container, false);
+        View myView = inflater.inflate(R.layout.fragment_module__mygarden, container, false);
+        floatingActionButton = (FloatingActionButton) myView.findViewById(R.id.floatingActionButton);
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Module_Mygarden.this.getActivity(),Add_Plant.class);
+                startActivity(intent);
+            }
+        });
+
+        return myView;
     }
 }

@@ -1,15 +1,18 @@
 package com.example.plantaid_application;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
@@ -19,6 +22,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +39,7 @@ public class Module_Identify_Plant extends Fragment implements View.OnClickListe
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1888;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -39,6 +48,8 @@ public class Module_Identify_Plant extends Fragment implements View.OnClickListe
     private ImageView pictureTaken;
     private TextView mtextView;
     private Uri imageUri;
+    private final int REQUEST_IMAGE_CAPTURE = 1234;
+
 
 
 
@@ -73,19 +84,6 @@ public class Module_Identify_Plant extends Fragment implements View.OnClickListe
         }
     }
 
-
-//    ActivityResultLauncher <Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-//            new ActivityResultCallback<ActivityResult>() {
-//                @Override
-//                public void onActivityResult(ActivityResult result) {
-//                    if(result.getResultCode() == Activity.RESULT_OK && result.getData() != null){
-//                        Intent intent = result.getData();
-//                        Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
-//                        pictureTaken.setImageBitmap(bitmap);
-//                    }
-//                }
-//            });
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -98,7 +96,6 @@ public class Module_Identify_Plant extends Fragment implements View.OnClickListe
 
 
 
-
         // Inflate the layout for this fragment
         return myView;
 
@@ -106,9 +103,24 @@ public class Module_Identify_Plant extends Fragment implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE,"new image");
+        values.put(MediaStore.Images.Media.DESCRIPTION,"From the camera");
+        imageUri = getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
         Intent camIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivity(camIntent);
+        camIntent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
+        startActivityForResult(camIntent, REQUEST_IMAGE_CAPTURE);
 
-
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+            pictureTaken.setImageURI(imageUri);
+//            Bundle extras = data.getExtras();
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
+//            pictureTaken.setImageBitmap(imageBitmap);
+        }
     }
 }
