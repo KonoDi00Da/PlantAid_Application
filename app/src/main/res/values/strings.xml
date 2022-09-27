@@ -5,24 +5,37 @@
     <string name="title_garden">My Garden</string>
     <string name="title_identify">Identify</string>
     <string name="title_settings">Settings</string>
+    <string name="title_add_plant">Add Plant</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    
+
     <string-array name="common_plant_names">
-        <item>Carrot</item>
-        <item>Tomato</item>
-        <item>Bittergourd</item>
-        <item>Chilli Peppers</item>
+        <item>Common Zinnia</item>
+        <item>Bougainvillea</item>
+        <item>Rose</item>
+        <item>Mustard</item>
         <item>Cabbage</item>
-        <item>Lettuce</item>
+        <item>Eggplant</item>
+        <item>Chili pepper</item>
     </string-array>
 
     <string-array name="scientific_plant_names">
+        <item>Zinnia elegans</item>
+        <item>Bougainvillea glabra</item>
+        <item>Rosa</item>
+        <item>Brassica nigra</item>
+        <item>Brassica oleracea var. capitata</item>
+        <item>Solanum melongena</item>
+        <item>Capsicum annuum</item>
+    </string-array>
+
+    <string-array name="plant_description">
         <item>Daucus carota</item>
         <item>Solanum lycopersicum L.</item>
         <item>Momordica charantia</item>
         <item>Capsicum frutescens</item>
         <item>Brassica oleracea var. capitata</item>
         <item>Lactuca sativa</item>
+        <item>Capsicum annuum</item>
     </string-array>
 </resources>
