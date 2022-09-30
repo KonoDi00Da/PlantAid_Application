@@ -1,4 +1,4 @@
-package com.example.plantaid_application;
+package com.example.plantaid_application.Models;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,19 +10,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.plantaid_application.R;
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 public class Plant_List_Adapter extends RecyclerView.Adapter<Plant_List_Adapter.MyViewHolder> {
-    private final RecyclerViewInterface recyclerViewInterface;
 
     Context context;
-    ArrayList<PlantModel> plantArrayList;
+    ArrayList<PlantListModel> list;
 
-    public Plant_List_Adapter(Context context, ArrayList<PlantModel> plantArrayList,
-                              RecyclerViewInterface recyclerViewInterface){
+    public Plant_List_Adapter(ArrayList<PlantListModel> list, Context context){
+        this.list = list;
         this.context = context;
-        this.plantArrayList = plantArrayList;
-        this.recyclerViewInterface = recyclerViewInterface;
     }
 
     @NonNull
@@ -31,20 +31,22 @@ public class Plant_List_Adapter extends RecyclerView.Adapter<Plant_List_Adapter.
         //This is where we'll be inflating the recyclerview (looks of the row)
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.recycler_view_row,parent,false);
-        return new Plant_List_Adapter.MyViewHolder(view,recyclerViewInterface);
+        return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull Plant_List_Adapter.MyViewHolder holder, int position) {
         //assigning the values to the recyclerview
-        holder.commonName.setText(plantArrayList.get(position).getCommonPlantName());
-        holder.sciName.setText(plantArrayList.get(position).getSciPlantName());
-        holder.imageView.setImageResource(plantArrayList.get(position).getImage());
+        PlantListModel model = list.get(position);
+
+        Picasso.get().load(model.getImage()).placeholder(R.drawable.ic_launcher_foreground).into(holder.imageView);
+        holder.commonName.setText(model.getCommonName());
+        holder.sciName.setText(model.getSciName());
     }
 
     @Override
     public int getItemCount() {
-        return plantArrayList.size();
+        return list.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
@@ -53,26 +55,26 @@ public class Plant_List_Adapter extends RecyclerView.Adapter<Plant_List_Adapter.
 
         ImageView imageView;
         TextView commonName, sciName;
-        public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
+        public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             imageView = itemView.findViewById(R.id.imageView);
             commonName = itemView.findViewById(R.id.plantCommonName);
             sciName = itemView.findViewById(R.id.plantScientificName);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (recyclerViewInterface != null){
-                        int pos = getAdapterPosition();
-
-                        if(pos != RecyclerView.NO_POSITION){
-                            recyclerViewInterface.onItemClick(pos);
-                        }
-
-                    }
-                }
-            });
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (recyclerViewInterface != null){
+//                        int pos = getAdapterPosition();
+//
+//                        if(pos != RecyclerView.NO_POSITION){
+//                            recyclerViewInterface.onItemClick(pos);
+//                        }
+//
+//                    }
+//                }
+//            });
         }
     }
 }

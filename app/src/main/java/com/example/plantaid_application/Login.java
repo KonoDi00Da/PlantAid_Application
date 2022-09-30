@@ -165,17 +165,17 @@ public class Login extends Fragment {
                         editTxtEmail.setError("Required");
                     } else {
                         dialog.dismiss();
-                        loadingDialog.startLoading("Please wait");
+                        //loadingDialog.startLoading("Please wait");
                         mAuth.sendPasswordResetEmail(resetEmail.getText().toString()).
                                 addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if(task.isSuccessful()){
-                                            loadingDialog.stopLoading();
+                                            //loadingDialog.stopLoading();
                                             toast("Please check your mail box");
                                         } else {
                                             toast("Invalid Email");
-                                            loadingDialog.stopLoading();
+                                            //loadingDialog.stopLoading();
                                             dialog.show();
                                             editTxtEmail.setText(resetEmail.getText().toString());
                                         }

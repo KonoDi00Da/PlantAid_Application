@@ -92,7 +92,7 @@ public class Module_Identify_Plant extends Fragment implements View.OnClickListe
         pictureTaken = (ImageView) myView.findViewById(R.id.plantPicture);
         mButton = (Button)myView.findViewById(R.id.btnCamera);
         mButton.setOnClickListener(this);
-        mtextView = (TextView) myView.findViewById(R.id.testCam);
+        //mtextView = (TextView) myView.findViewById(R.id.testCam);
 
 
 

@@ -58,7 +58,7 @@ public class Module_Today extends Fragment {
                    userGreeting.setText("Welcome, " + fname + "!");
                }
                else{
-                   userGreeting.setText("Welcome, Renette");
+                   userGreeting.setText("Hi there!");
                }
            }
 
