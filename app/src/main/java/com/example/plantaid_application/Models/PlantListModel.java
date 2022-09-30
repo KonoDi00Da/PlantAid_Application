@@ -1,17 +1,34 @@
 package com.example.plantaid_application.Models;
 
 public class PlantListModel {
-    String commonName, sciName;
+    public String commonName, sciName, description, care, harvest, pestsDiseases, varieties,
+            water, ytLink,key;
     String image;
 
     PlantListModel() {
 
     }
 
-    public PlantListModel(String commonName, String sciName, String image) {
+    public PlantListModel(String commonName, String sciName, String description, String care, String harvest, String pestsDiseases, String varieties, String water, String ytLink, String image,String key) {
         this.commonName = commonName;
         this.sciName = sciName;
+        this.description = description;
+        this.care = care;
+        this.harvest = harvest;
+        this.pestsDiseases = pestsDiseases;
+        this.varieties = varieties;
+        this.water = water;
+        this.ytLink = ytLink;
         this.image = image;
+        this.key = key;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getCommonName() {
@@ -28,6 +45,62 @@ public class PlantListModel {
 
     public void setSciName(String sciName) {
         this.sciName = sciName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getCare() {
+        return care;
+    }
+
+    public void setCare(String care) {
+        this.care = care;
+    }
+
+    public String getHarvest() {
+        return harvest;
+    }
+
+    public void setHarvest(String harvest) {
+        this.harvest = harvest;
+    }
+
+    public String getPestsDiseases() {
+        return pestsDiseases;
+    }
+
+    public void setPestsDiseases(String pestsDiseases) {
+        this.pestsDiseases = pestsDiseases;
+    }
+
+    public String getVarieties() {
+        return varieties;
+    }
+
+    public void setVarieties(String varieties) {
+        this.varieties = varieties;
+    }
+
+    public String getWater() {
+        return water;
+    }
+
+    public void setWater(String water) {
+        this.water = water;
+    }
+
+    public String getYtLink() {
+        return ytLink;
+    }
+
+    public void setYtLink(String ytLink) {
+        this.ytLink = ytLink;
     }
 
     public String getImage() {

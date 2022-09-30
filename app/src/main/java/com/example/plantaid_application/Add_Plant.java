@@ -69,11 +69,13 @@ public class Add_Plant extends AppCompatActivity implements RecyclerViewInterfac
         });
 
 
+
+
     }
     public boolean isOnline() {
         Runtime runtime = Runtime.getRuntime();
         try {
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            Process ipProcess = runtime.exec("/system/b.in/ping -c 1 8.8.8.8");
             int     exitValue = ipProcess.waitFor();
             return (exitValue == 0);
         }

@@ -44,9 +44,8 @@ public class Module_Today extends Fragment {
         database = FirebaseDatabase.getInstance();
 
         userGreeting = view.findViewById(R.id.txtUserName);
-
         DatabaseReference reference = database.getReference("Users").child(currentUser.getUid());
-       reference.addValueEventListener(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
            @Override
            public void onDataChange(@NonNull DataSnapshot snapshot) {
                User user = snapshot.getValue(User.class);

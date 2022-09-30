@@ -16,6 +16,7 @@
             android:orientation="vertical" >
 
             <ImageView
+                android:scaleType="centerCrop"
                 android:id="@+id/plant_image"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
@@ -281,7 +282,10 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <WebView
+                    <TextView
+                        android:id="@+id/ytLink"
+                        android:text="Video here"
+                        android:gravity="center"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -324,7 +328,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
                     <EditText
-                        android:id="@+id/editTextTextPersonName"
+                        android:id="@+id/plantAge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"
@@ -337,13 +341,13 @@
                         app:layout_constraintTop_toBottomOf="@+id/textView17" />
 
                     <Button
-                        android:id="@+id/button"
+                        android:id="@+id/addToGardenBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Add to My Garden"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+                        app:layout_constraintTop_toBottomOf="@+id/plantAge" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
