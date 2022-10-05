@@ -24,67 +24,68 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class Plant_List_Adapter extends RecyclerView.Adapter<Plant_List_Adapter.MyViewHolder> {
+public class MyGardenPlants extends RecyclerView.Adapter<MyGardenPlants.MyViewHolder>{
+    Add_Plant_Details add_plant_details = new Add_Plant_Details();
 
     Context context;
-    ArrayList<PlantListModel> list;
+    ArrayList<User_Plants> list;
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
     FirebaseDatabase database;
-    
 
-    public Plant_List_Adapter(ArrayList<PlantListModel> list, Context context){
+    public MyGardenPlants(ArrayList<User_Plants> list, Context context){
         this.list = list;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public Plant_List_Adapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyGardenPlants.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //This is where we'll be inflating the recyclerview (looks of the row)
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.recycler_view_row,parent,false);
-        return new MyViewHolder(view);
+        return new MyGardenPlants.MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Plant_List_Adapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyGardenPlants.MyViewHolder holder, int position) {
         //assigning the values to the recyclerview
-        PlantListModel model = list.get(position);
+        User_Plants model = list.get(position);
 
-        Picasso.get().load(model.getImage()).placeholder(R.drawable.ic_launcher_foreground).into(holder.imageView);
-        holder.commonName.setText(model.getCommonName());
-        holder.sciName.setText(model.getSciName());
-        //holder.setListener((view, po))
+        //Picasso.get().load(model.getImage()).placeholder(R.drawable.ic_launcher_foreground).into(holder.imageView);
+        holder.commonName.setText(model.getC_plantName());
+        holder.sciName.setText(model.getS_plantName());
+        addToGarden(model);
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, Add_Plant_Details.class);
-                intent.putExtra("plant_image",model.getImage());
-                intent.putExtra("com_plant", model.getCommonName());
-                intent.putExtra("sci_plant", model.getSciName());
-                intent.putExtra("txtWater", model.getWater());
-                intent.putExtra("txtHarvest", model.getHarvest());
-                intent.putExtra("txtCare", model.getCare());
-                intent.putExtra("plant_desc",model.getDescription());
-                intent.putExtra("txtPestsDisease",model.getPestsDiseases());
-                intent.putExtra("ytLink",model.getYtLink());
-                intent.putExtra("key",model.getKey());
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+
+//                Intent intent = new Intent(context, Add_Plant_Details.class);
+//                intent.putExtra("plant_image",model.getImage());
+//                intent.putExtra("com_plant", model.getCommonName());
+//                intent.putExtra("sci_plant", model.getSciName());
+//                intent.putExtra("txtWater", model.getWater());
+//                intent.putExtra("txtHarvest", model.getHarvest());
+//                intent.putExtra("txtCare", model.getCare());
+//                intent.putExtra("plant_desc",model.getDescription());
+//                intent.putExtra("txtPestsDisease",model.getPestsDiseases());
+//                intent.putExtra("ytLink",model.getYtLink());
+//                intent.putExtra("key",model.getKey());
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                context.startActivity(intent);
             }
         });
     }
 
-    private void addToGarden(PlantListModel plantListModel){
+    private void addToGarden(User_Plants userPlants){
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
-        DatabaseReference userRef = database.getReference("Users").child(currentUser.getUid());
+        DatabaseReference userRef = database.getReference("Users").child(currentUser.getUid()).child("myGarden");
 
-        userRef.child(plantListModel.getKey())
+        userRef.child(add_plant_details.key)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -92,12 +93,11 @@ public class Plant_List_Adapter extends RecyclerView.Adapter<Plant_List_Adapter.
 
                         }
                         else{
-                            PlantListModel model = new PlantListModel();
-                            model.setCommonName(model.getCommonName());
-                            model.setImage(model.getImage());
-                            model.setSciName(model.getSciName());
+                            User_Plants model = new User_Plants();
+                            model.setC_plantName(model.getC_plantName());
+                            model.setS_plantName(model.getS_plantName());
 
-                            userRef.child(plantListModel.getKey()).setValue(model);
+                            userRef.child(add_plant_details.key).setValue(model);
                         }
                     }
 
@@ -140,9 +140,6 @@ public class Plant_List_Adapter extends RecyclerView.Adapter<Plant_List_Adapter.
 //                    }
 //                }
 //            });
-        }
-
-        public void setListener() {
         }
     }
 }

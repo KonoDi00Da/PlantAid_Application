@@ -13,6 +13,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.plantaid_application.Models.FirebaseOffline;
 import com.example.plantaid_application.Models.PlantListModel;
 import com.example.plantaid_application.Models.PlantModel;
 import com.example.plantaid_application.Models.Plant_List_Adapter;
@@ -27,21 +28,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Add_Plant extends AppCompatActivity implements RecyclerViewInterface {
+
     RecyclerView recyclerView;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     ArrayList<PlantListModel> plantArrayList = new ArrayList<>();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_add_plant);
 
         recyclerView = findViewById(R.id.mRecyclerView);
         plantArrayList = new ArrayList<>();
 
-        firebaseDatabase = FirebaseDatabase.getInstance();
+        //firebaseDatabase = FirebaseDatabase.getInstance();
+
 
         Plant_List_Adapter recyclerAdapter = new Plant_List_Adapter(plantArrayList,getApplicationContext());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -84,7 +87,6 @@ public class Add_Plant extends AppCompatActivity implements RecyclerViewInterfac
 
         return false;
     }
-
 
     @Override
     public void onItemClick(int position) {

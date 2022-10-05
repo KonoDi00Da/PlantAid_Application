@@ -112,6 +112,7 @@ public class SignUp extends Fragment {
                 return;
             }
 
+            //put data into database
             mAuth.fetchSignInMethodsForEmail(email)
                     .addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
                         @Override

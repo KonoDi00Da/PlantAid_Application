@@ -127,8 +127,9 @@ public class Login extends Fragment {
             return;
         }
 
-        //progressbar
+        //add progressbar here
 
+        //authenticate user login
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
