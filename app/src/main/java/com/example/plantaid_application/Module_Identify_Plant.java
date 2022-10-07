@@ -229,6 +229,7 @@ public class Module_Identify_Plant extends Fragment {
 //            saveImage(setPic());
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             String imageFileName = "IMAGE_" + timeStamp + "." + getFileExt(contentUri);
+
             uploadImageToFirebase(imageFileName, contentUri);
             //imgView.setImageURI(Uri.fromFile(f));
 
@@ -246,12 +247,14 @@ public class Module_Identify_Plant extends Fragment {
         }
     }
 
+    //for file extension
     private String getFileExt(Uri contentUri){
         ContentResolver contentResolver = getActivity().getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(contentResolver.getType(contentUri));
     }
 
+    //upload to firebase
     private void uploadImageToFirebase(String name, Uri uri){
         loadingDialog.startLoading("Please wait");
         String userID = userRef.toString();
@@ -282,6 +285,7 @@ public class Module_Identify_Plant extends Fragment {
         });
     }
 
+    // creating root img file  (only for the application and cannot be seen in gallery)
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -298,6 +302,7 @@ public class Module_Identify_Plant extends Fragment {
         return image;
     }
 
+    //camera intent
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -326,28 +331,7 @@ public class Module_Identify_Plant extends Fragment {
         }
     }
 
-    private void dispatchTakePictureIntent1() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if(checkStoragePermissions()){
-            if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                // Create the File where the photo should go
-                File photoFile = null;
-                // Continue only if the File was successfully created
-                if (photoFile != null) {
-                    photoURI = FileProvider.getUriForFile(getActivity(),
-                            "com.example.plantaid_application",
-                            photoFile);
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                }
-            }
-        }
-        else{
-            requestStoragePermission();
-        }
-    }
-
+    // the bitmap displayed in the imageView
     private Bitmap setPic() {
         // Get the dimensions of the View
         int targetW = imgView.getWidth();
@@ -373,6 +357,7 @@ public class Module_Identify_Plant extends Fragment {
         return bitmap;
     }
 
+    //optional but save image in gallery (madodoble if ginamit tho)
     private void saveImage(Bitmap bitmap) {
         if (android.os.Build.VERSION.SDK_INT >= 29) {
             ContentValues values = contentValues();
@@ -409,6 +394,7 @@ public class Module_Identify_Plant extends Fragment {
         }
     }
 
+    // used with saveImage
     private ContentValues contentValues() {
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
@@ -419,6 +405,7 @@ public class Module_Identify_Plant extends Fragment {
         return values;
     }
 
+    // used with saveImage
     private void saveImageToStream(Bitmap bitmap, OutputStream outputStream) {
         if (outputStream != null) {
             try {
@@ -456,32 +443,6 @@ public class Module_Identify_Plant extends Fragment {
 //        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
     }
 
-    public static String convertStreamToString(InputStream is) throws IOException {
-        // http://www.java2s.com/Code/Java/File-Input-Output/ConvertInputStreamtoString.htm
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
-        String line = null;
-        Boolean firstLine = true;
-        while ((line = reader.readLine()) != null) {
-            if(firstLine){
-                sb.append(line);
-                firstLine = false;
-            } else {
-                sb.append("\n").append(line);
-            }
-        }
-        reader.close();
-        return sb.toString();
-    }
-
-    public static String getStringFromFile (String filePath) throws IOException {
-        File fl = new File(filePath);
-        FileInputStream fin = new FileInputStream(fl);
-        String ret = convertStreamToString(fin);
-        //Make sure you close all streams.
-        fin.close();
-        return ret;
-    }
 
     private void toast(String message){
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
