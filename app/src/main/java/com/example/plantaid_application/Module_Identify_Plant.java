@@ -69,7 +69,7 @@ public class Module_Identify_Plant extends Fragment {
     //blurry imageview
     //save data in imgview even when changed navigation
     //upload camera image in firebase
-    //double
+    //jumbo hatdog kaya mo ba to
 
     private Button btnCamera, btnGallery, btnIdentify, btnSaveImage;
     private ImageView imgView;
