@@ -21,6 +21,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PlantAid_Application"
         android:usesCleartextTraffic="true">
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.plantaid_application"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <activity
             android:name=".Module_Identify_Plant_Result"
             android:exported="true" />

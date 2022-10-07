@@ -68,9 +68,8 @@ public class Module_Identify_Plant extends Fragment {
     // fix double request permissions
     //blurry imageview
     //save data in imgview even when changed navigation
-    //add write external storage
-    //save image
     //upload camera image in firebase
+    //double
 
     private Button btnCamera, btnGallery, btnIdentify, btnSaveImage;
     private ImageView imgView;
@@ -82,6 +81,8 @@ public class Module_Identify_Plant extends Fragment {
     private String u_plantID; // unique plant id
     private Uri contentUri;
     private String url;
+    private String currentPhotoPath;
+    private Uri photoURI;
 //    private Uri uri;
 
     FirebaseAuth mAuth;
@@ -89,6 +90,7 @@ public class Module_Identify_Plant extends Fragment {
     FirebaseDatabase database;
     FirebaseStorage firebaseStorage;
     DatabaseReference userRef;
+    LoadingDialog loadingDialog;
 
 
 
@@ -109,6 +111,7 @@ public class Module_Identify_Plant extends Fragment {
         btnIdentify = view.findViewById(R.id.btnIdentify);
         btnSaveImage = view.findViewById(R.id.btnSaveImage);
         filePath = view.findViewById(R.id.imgPath);
+        loadingDialog = new LoadingDialog(getActivity());
 
         firebaseStorage = FirebaseStorage.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -123,18 +126,6 @@ public class Module_Identify_Plant extends Fragment {
                     takePicture();
                 }else{
                     requestCamPermission();
-                }
-            }
-        });
-
-        btnSaveImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(checkStoragePermissions()){
-                    saveImage(imageBitmap);
-                }
-                else{
-                    requestStoragePermission();
                 }
             }
         });
@@ -232,9 +223,14 @@ public class Module_Identify_Plant extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            Bundle extras = data.getExtras();
-            imageBitmap = (Bitmap) extras.get("data");
-            imgView.setImageBitmap(imageBitmap);
+//            File f = new File(currentPhotoPath);
+            contentUri = photoURI;
+            imgView.setImageBitmap(setPic());
+//            saveImage(setPic());
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String imageFileName = "IMAGE_" + timeStamp + "." + getFileExt(contentUri);
+            uploadImageToFirebase(imageFileName, contentUri);
+            //imgView.setImageURI(Uri.fromFile(f));
 
         }
         if(requestCode == IMAGE_PICK_CODE && resultCode == Activity.RESULT_OK){
@@ -256,11 +252,12 @@ public class Module_Identify_Plant extends Fragment {
         return mime.getExtensionFromMimeType(contentResolver.getType(contentUri));
     }
 
-    private void uploadImageToFirebase(String name, Uri contentUri){
+    private void uploadImageToFirebase(String name, Uri uri){
+        loadingDialog.startLoading("Please wait");
         String userID = userRef.toString();
         StorageReference reference = firebaseStorage.getReference().child(userID).child(name);
 
-        reference.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        reference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -271,6 +268,7 @@ public class Module_Identify_Plant extends Fragment {
                         u_plantID = userRef.push().getKey();
                         userRef.child("plantIdentification").child(u_plantID).setValue(model);
                         url = model.getIdImage();
+                        loadingDialog.stopLoading();
                         toast("Plant added successfully");
 
                     }
@@ -282,7 +280,97 @@ public class Module_Identify_Plant extends Fragment {
                 });
             }
         });
+    }
 
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "IMAGES_" + timeStamp + "_";
+//        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if(checkStoragePermissions()){
+            if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                // Create the File where the photo should go
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    // Error occurred while creating the File
+                }
+                // Continue only if the File was successfully created
+                if (photoFile != null) {
+                    photoURI = FileProvider.getUriForFile(getActivity(),
+                            "com.example.plantaid_application",
+                            photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
+            }
+        }
+        else{
+            requestStoragePermission();
+        }
+    }
+
+    private void dispatchTakePictureIntent1() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if(checkStoragePermissions()){
+            if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                // Create the File where the photo should go
+                File photoFile = null;
+                // Continue only if the File was successfully created
+                if (photoFile != null) {
+                    photoURI = FileProvider.getUriForFile(getActivity(),
+                            "com.example.plantaid_application",
+                            photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
+            }
+        }
+        else{
+            requestStoragePermission();
+        }
+    }
+
+    private Bitmap setPic() {
+        // Get the dimensions of the View
+        int targetW = imgView.getWidth();
+        int targetH = imgView.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+
+        BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.max(1, Math.min(photoW/targetW, photoH/targetH));
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+        return bitmap;
     }
 
     private void saveImage(Bitmap bitmap) {
@@ -300,7 +388,6 @@ public class Module_Identify_Plant extends Fragment {
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-
             }
         } else {
             File directory = new File(Environment.getExternalStorageDirectory().toString() + '/' + getString(R.string.app_name));
@@ -335,7 +422,7 @@ public class Module_Identify_Plant extends Fragment {
     private void saveImageToStream(Bitmap bitmap, OutputStream outputStream) {
         if (outputStream != null) {
             try {
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
                 outputStream.close();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -349,7 +436,6 @@ public class Module_Identify_Plant extends Fragment {
         intent.putExtra("userPic", value);
         intent.putExtra("url", url);
         startActivity(intent);
-
 //        Fragment fragment = new Fragment();
 //        String key = "1";
 //        String value = uri.toString();
@@ -365,8 +451,9 @@ public class Module_Identify_Plant extends Fragment {
     }
 
     private void takePicture() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+        dispatchTakePictureIntent();
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
     }
 
     public static String convertStreamToString(InputStream is) throws IOException {

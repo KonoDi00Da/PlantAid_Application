@@ -27,6 +27,9 @@ import okhttp3.Response;
 
 public class Module_Identify_Plant_Result extends AppCompatActivity {
     private TextView txtPlantID;
+    LoadingDialog loadingDialog;
+
+    //if not plant then edi ende
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class Module_Identify_Plant_Result extends AppCompatActivity {
         setContentView(R.layout.activity_module_identify_plant_result);
         OkHttpClient client = new OkHttpClient();
         String imgUrl = getIntent().getStringExtra("serviceUrl");
+        loadingDialog = new LoadingDialog(this);
 
         //PlantIdentifyModel model = new PlantIdentifyModel();
         //String imgPath = getIntent().getStringExtra("userPic");
@@ -52,6 +56,7 @@ public class Module_Identify_Plant_Result extends AppCompatActivity {
             Request request = new Request.Builder()
                     .url(serviceUrl)
                     .build();
+            loadingDialog.startLoading("Fetching data...");
 
             client.newCall(request).enqueue(new Callback() {
                 @Override
@@ -67,6 +72,7 @@ public class Module_Identify_Plant_Result extends AppCompatActivity {
                         Module_Identify_Plant_Result.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                loadingDialog.stopLoading();
                                 txtPlantID.setText(myResponse);
                             }
                         });
