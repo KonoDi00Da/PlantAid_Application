@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PlantAid_Application</string>
+    <string name="app_name">PlantAid</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_today">Today</string>
     <string name="title_garden">My Garden</string>
