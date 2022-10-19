@@ -1,15 +1,11 @@
 package com.example.plantaid_application;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
-import android.view.MenuItem;
 
+import com.example.plantaid_application.MyGarden.Module_Mygarden_Fragment;
 import com.example.plantaid_application.databinding.ActivityMainBinding;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 
 public class MainHome extends AppCompatActivity {
 
@@ -31,7 +27,7 @@ public class MainHome extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.nav_fragment, new Module_Today()).addToBackStack(null).commit();
                     break;
                 case R.id.navigation_garden:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_fragment, new Module_Mygarden()).addToBackStack(null).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_fragment, new Module_Mygarden_Fragment()).addToBackStack(null).commit();
                     break;
                 case R.id.navigation_identify:
                     getSupportFragmentManager().beginTransaction().replace(R.id.nav_fragment, new Module_Identify_Plant()).addToBackStack(null).commit();

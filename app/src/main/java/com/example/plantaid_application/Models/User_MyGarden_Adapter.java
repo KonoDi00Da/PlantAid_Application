@@ -12,66 +12,56 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.plantaid_application.MyGarden.Add_Plant_Details;
+import com.example.plantaid_application.MyGarden.Module_MyGarden_Details;
 import com.example.plantaid_application.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class Plant_List_Adapter extends RecyclerView.Adapter<Plant_List_Adapter.MyViewHolder> {
+public class User_MyGarden_Adapter extends RecyclerView.Adapter<User_MyGarden_Adapter.MyViewHolder> {
 
     Context context;
-    ArrayList<PlantListModel> list;
+    ArrayList<User_Plants> list;
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
     FirebaseDatabase database;
-    
 
-    public Plant_List_Adapter(ArrayList<PlantListModel> list, Context context){
+
+    public User_MyGarden_Adapter(ArrayList<User_Plants> list, Context context){
         this.list = list;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public Plant_List_Adapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public User_MyGarden_Adapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //This is where we'll be inflating the recyclerview (looks of the row)
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.recycler_view_row,parent,false);
-        return new MyViewHolder(view);
+        return new User_MyGarden_Adapter.MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Plant_List_Adapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull User_MyGarden_Adapter.MyViewHolder holder, int position) {
         //assigning the values to the recyclerview
-        PlantListModel model = list.get(position);
+        User_Plants model = list.get(position);
 
         Picasso.get().load(model.getImage()).placeholder(R.drawable.ic_launcher_foreground).into(holder.imageView);
-        holder.commonName.setText(model.getCommonName());
-        holder.sciName.setText(model.getSciName());
+        holder.commonName.setText(model.getC_plantName());
+        holder.sciName.setText(model.getS_plantName());
         //holder.setListener((view, po))
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, Add_Plant_Details.class);
+                Intent intent = new Intent(context, Module_MyGarden_Details.class);
                 intent.putExtra("plant_image",model.getImage());
-                intent.putExtra("com_plant", model.getCommonName());
-                intent.putExtra("sci_plant", model.getSciName());
-                intent.putExtra("txtWater", model.getWater());
-                intent.putExtra("txtHarvest", model.getHarvest());
-                intent.putExtra("txtCare", model.getCare());
-                intent.putExtra("plant_desc",model.getDescription());
-                intent.putExtra("txtPestsDisease",model.getPestsDiseases());
-                intent.putExtra("ytLink",model.getYtLink());
-                intent.putExtra("key",model.getKey());
+                intent.putExtra("userKey",model.getUser_key());
+                intent.putExtra("plantKey",model.getKey());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }

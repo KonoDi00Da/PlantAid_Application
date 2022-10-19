@@ -1,9 +1,12 @@
-package com.example.plantaid_application;
+package com.example.plantaid_application.MyGarden;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.webkit.WebViewAssetLoader;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,10 +21,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.plantaid_application.Models.PlantListModel;
-import com.example.plantaid_application.Models.PlantModel;
-import com.example.plantaid_application.Models.Plant_List_Adapter;
+import com.example.plantaid_application.MainHome;
 import com.example.plantaid_application.Models.User_Plants;
+import com.example.plantaid_application.Module_Today;
+import com.example.plantaid_application.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,17 +35,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 public class Add_Plant_Details extends AppCompatActivity {
     public String key;
     TextView commonNameTextView, sciNameTextView, descriptionTextView, txtWater, txtHarvest, txtCare, txtPestsDiseases;
     ImageView imgPlant;
     WebView webView;
-    String comPlant, sciPlant;
+    String comPlant, sciPlant, image;
     EditText editTxtPlantAge;
+
     Button addToGardenBtn;
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
@@ -92,10 +93,10 @@ public class Add_Plant_Details extends AppCompatActivity {
             txtCare.setText(getIntent().getStringExtra("txtCare"));
             txtPestsDiseases.setText(getIntent().getStringExtra("txtPestsDisease"));
 
-
             key = getIntent().getStringExtra("key");
             comPlant = getIntent().getStringExtra("com_plant");
             sciPlant = getIntent().getStringExtra("sci_plant");
+            image = getIntent().getStringExtra("plant_image");
 
             //youtube view
 
@@ -136,41 +137,24 @@ public class Add_Plant_Details extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-                    String age = editTxtPlantAge.getText().toString().trim();
-                    if (age.isEmpty()) {
-                        editTxtPlantAge.setError("Please specify the plant age");
-                        editTxtPlantAge.requestFocus();
-                        return;
-                    }
-
-                    DatabaseReference plantRef = database.getReference("Plants");
                     DatabaseReference userRef = database.getReference("Users").child(currentUser.getUid());
-                    userRef.addValueEventListener(new ValueEventListener() {
+                    userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             String plantID = "myGarden";
-                            User_Plants userPlants = new User_Plants(comPlant, sciPlant, age);
-                            userRef.child(plantID).child(key).setValue(userPlants);
-                            PlantListModel plantListModel = snapshot.getValue(PlantListModel.class);
-
-//                        Map<String,Object> map = new HashMap<>();
-//                        map.put("common_name", comPlant);
-//                        map.put("sci_name", sciPlant);
-//                        map.put("plant_image", imgPlant);
-//                        map.put("plant_age", plantAge);
-//                        userRef.child(plantID).setValue(map).addOnCompleteListener(task ->
-//                                {
-//                                    if(task.isSuccessful()){
-//                                        toast("Plant successfully added!");
-//                                    }
-//                                    else{
-//                                        toast("Error in saving plannt");
-//                                    }
-//                                });
-
-//                        userRef.child(plantID).child(key).child("common_name").setValue(comPlant);
-//                        userRef.child(plantID).child(key).child("sci_name").setValue(sciPlant);
-//                        userRef.child(plantID).child(key).child("plant_image").setValue(imgPlant);
+                            String userPlantKey = userRef.push().getKey();
+                            int num = 0;
+                            if(snapshot.exists()){
+                                num++;
+                                String newPlant = String.valueOf(num);
+                                String newString = comPlant + "("+newPlant+")";
+                                User_Plants userPlants = new User_Plants(newString, sciPlant, image, key, userPlantKey);
+                                userRef.child(plantID).child(userPlantKey).setValue(userPlants);
+                            }else{
+                                User_Plants userPlants = new User_Plants(comPlant, sciPlant, image, key, userPlantKey);
+                                userRef.child(plantID).child(userPlantKey).setValue(userPlants);
+                                toast("Plant added successfully");
+                            }
                         }
 
                         @Override
@@ -178,6 +162,9 @@ public class Add_Plant_Details extends AppCompatActivity {
 
                         }
                     });
+
+                    Intent myGarden = new Intent(Add_Plant_Details.this, MainHome.class);
+                    startActivity(myGarden);
                 }
             });
 

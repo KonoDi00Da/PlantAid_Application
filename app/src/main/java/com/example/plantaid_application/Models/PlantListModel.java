@@ -1,15 +1,17 @@
 package com.example.plantaid_application.Models;
 
 public class PlantListModel {
-    public String commonName, sciName, description, care, harvest, pestsDiseases, varieties,
+    private String commonName, sciName, description, care, harvest, pestsDiseases, varieties,
             water, ytLink,key;
-    String image;
+    private String progress;
+
+    private String image;
 
     PlantListModel() {
 
     }
 
-    public PlantListModel(String commonName, String sciName, String description, String care, String harvest, String pestsDiseases, String varieties, String water, String ytLink, String image,String key) {
+    public PlantListModel(String commonName, String sciName, String description, String care, String harvest, String pestsDiseases, String varieties, String water, String ytLink, String image,String key, String progress) {
         this.commonName = commonName;
         this.sciName = sciName;
         this.description = description;
@@ -21,6 +23,15 @@ public class PlantListModel {
         this.ytLink = ytLink;
         this.image = image;
         this.key = key;
+        this.progress = progress;
+    }
+
+    public String getProgress() {
+        return progress;
+    }
+
+    public void setProgress(String progress) {
+        this.progress = progress;
     }
 
     public String getKey() {

@@ -1,7 +1,6 @@
 package com.example.plantaid_application.Models;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.plantaid_application.Add_Plant_Details;
+import com.example.plantaid_application.MyGarden.Add_Plant_Details;
 import com.example.plantaid_application.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -20,7 +19,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -127,19 +125,6 @@ public class MyGardenPlants extends RecyclerView.Adapter<MyGardenPlants.MyViewHo
             commonName = itemView.findViewById(R.id.plantCommonName);
             sciName = itemView.findViewById(R.id.plantScientificName);
 
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    if (recyclerViewInterface != null){
-//                        int pos = getAdapterPosition();
-//
-//                        if(pos != RecyclerView.NO_POSITION){
-//                            recyclerViewInterface.onItemClick(pos);
-//                        }
-//
-//                    }
-//                }
-//            });
         }
     }
 }

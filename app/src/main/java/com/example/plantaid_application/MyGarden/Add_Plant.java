@@ -1,4 +1,4 @@
-package com.example.plantaid_application;
+package com.example.plantaid_application.MyGarden;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,18 +6,12 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 
-import com.example.plantaid_application.Models.FirebaseOffline;
 import com.example.plantaid_application.Models.PlantListModel;
-import com.example.plantaid_application.Models.PlantModel;
 import com.example.plantaid_application.Models.Plant_List_Adapter;
 import com.example.plantaid_application.Models.RecyclerViewInterface;
+import com.example.plantaid_application.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,7 +24,6 @@ import java.util.ArrayList;
 public class Add_Plant extends AppCompatActivity implements RecyclerViewInterface {
 
     RecyclerView recyclerView;
-    FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     ArrayList<PlantListModel> plantArrayList = new ArrayList<>();
 

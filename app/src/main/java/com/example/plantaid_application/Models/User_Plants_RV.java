@@ -1,30 +1,22 @@
 package com.example.plantaid_application.Models;
 
-public class User_Plants {
+public class User_Plants_RV {
     public String image;
     public String key;
-    public String user_key;
     public String c_plantName;
     public String s_plantName;
+    public String plantAge;
 
-    public User_Plants() {
+    public User_Plants_RV() {
 
     }
 
-    public User_Plants(String c_plantName, String s_plantName, String image, String key, String user_key) {
-        this.user_key = user_key;
+    public User_Plants_RV(String c_plantName, String s_plantName, String plantAge, String image, String key) {
         this.key = key;
         this.image = image;
         this.c_plantName = c_plantName;
         this.s_plantName = s_plantName;
-    }
-
-    public String getUser_key() {
-        return user_key;
-    }
-
-    public void setUser_key(String user_key) {
-        this.user_key = user_key;
+        this.plantAge = plantAge;
     }
 
     public String getKey() {
@@ -51,6 +43,13 @@ public class User_Plants {
         this.s_plantName = s_plantName;
     }
 
+    public String getPlantAge() {
+        return plantAge;
+    }
+
+    public void setPlantAge(String plantAge) {
+        this.plantAge = plantAge;
+    }
 
     public String getImage() {
         return image;

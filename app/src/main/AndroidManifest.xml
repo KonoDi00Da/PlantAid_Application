@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -34,19 +35,20 @@
 
         <activity
             android:name=".Module_Identify_Plant_Result"
-            android:exported="true" />
+            android:exported="true">
+
+        </activity>
         <activity
             android:name=".Module_Identify_Plant_Organ"
             android:exported="true" />
         <activity
-            android:name=".Module_MyGarden_Details"
+            android:name=".MyGarden.Module_MyGarden_Details"
             android:exported="true" />
         <activity
             android:name=".SplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -54,12 +56,12 @@
             android:name=".Welcome_Screen"
             android:exported="true" />
         <activity
-            android:name=".Add_Plant_Details"
+            android:name=".MyGarden.Add_Plant_Details"
             android:configChanges="orientation|screenSize"
             android:exported="true"
             android:label="@string/title_add_plant" />
         <activity
-            android:name=".Add_Plant"
+            android:name=".MyGarden.Add_Plant"
             android:exported="true"
             android:label="@string/title_add_plant" />
         <activity

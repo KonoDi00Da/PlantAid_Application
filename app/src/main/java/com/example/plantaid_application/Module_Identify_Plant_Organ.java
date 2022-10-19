@@ -32,7 +32,6 @@ public class Module_Identify_Plant_Organ extends AppCompatActivity {
         btnBark = findViewById(R.id.btnBark);
         String url = getIntent().getStringExtra("url");
         intent.putExtra("serviceUrl", url);
-        toast(url);
 
 
         // getting attached intent data

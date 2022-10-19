@@ -29,7 +29,7 @@
         <entry key="app/src/main/res/layout/fragment_progress.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.24166666666666667" />
         <entry key="app/src/main/res/layout/fragment_sign_up.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/recycler_view_identify_plants.xml" value="0.19829059829059828" />
+        <entry key="app/src/main/res/layout/recycler_view_identify_plants.xml" value="0.2" />
         <entry key="app/src/main/res/layout/recycler_view_row.xml" value="0.25" />
         <entry key="app/src/main/res/layout/reset_password.xml" value="0.19829059829059828" />
         <entry key="app/src/main/res/menu/bottom_nav.xml" value="0.24166666666666667" />
