@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.example.plantaid_application.Models.PlantIdentifyModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,11 +45,11 @@ public class Module_Identify_Plant_Result extends AppCompatActivity {
 
         txtPlantID = findViewById(R.id.txtPlantID);
         try {
-            //https://my-api.plantnet.org/v2/identify/all?api-key=2b10UhsM38YnFCRm7pHO8zK&images=imgPath&organs=fruit
+            //https://my-api.plantnet.org/v2/identify/all?api-key=2b10UhsM38YnFCRm7pHO8zK&images=imgPath&organs=fruit&include-related-images=true
             String afterEncode = URLEncoder.encode(imgUrl, "UTF-8");
             String api_key = "2b10UhsM38YnFCRm7pHO8zK";
             String organ = getIntent().getStringExtra("plantOrgan");
-            String serviceUrl = "https://my-api.plantnet.org/v2/identify/all?api-key="+ api_key +"&images="+ afterEncode +"&organs="+ organ;
+            String serviceUrl = "https://my-api.plantnet.org/v2/identify/all?api-key="+ api_key +"&images="+ afterEncode +"&organs="+ organ+"&include-related-images=true";
             //txtPlantID.setText(afterEncode);
 
             Request request = new Request.Builder()
