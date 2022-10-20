@@ -141,20 +141,14 @@ public class Add_Plant_Details extends AppCompatActivity {
                     userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                            //get date added
                             String plantID = "myGarden";
                             String userPlantKey = userRef.push().getKey();
-                            int num = 0;
-                            if(snapshot.exists()){
-                                num++;
-                                String newPlant = String.valueOf(num);
-                                String newString = comPlant + "("+newPlant+")";
-                                User_Plants userPlants = new User_Plants(newString, sciPlant, image, key, userPlantKey);
-                                userRef.child(plantID).child(userPlantKey).setValue(userPlants);
-                            }else{
-                                User_Plants userPlants = new User_Plants(comPlant, sciPlant, image, key, userPlantKey);
-                                userRef.child(plantID).child(userPlantKey).setValue(userPlants);
-                                toast("Plant added successfully");
-                            }
+                            User_Plants userPlants = new User_Plants(comPlant, sciPlant, image, key, userPlantKey);
+                            userRef.child(plantID).child(userPlantKey).setValue(userPlants);
+                            toast("Plant added successfully");
+
                         }
 
                         @Override

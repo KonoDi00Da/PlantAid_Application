@@ -11,10 +11,12 @@
         <entry key="app/src/main/res/layout/activity_module_identify_plant_organ.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_module_identify_plant_result.xml" value="0.2510548523206751" />
         <entry key="app/src/main/res/layout/activity_module_my_garden_details.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/activity_plant_care_add_reminder.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_splash_screen.xml" value="0.19829059829059828" />
         <entry key="app/src/main/res/layout/activity_user_login.xml" value="0.19829059829059828" />
         <entry key="app/src/main/res/layout/activity_user_register.xml" value="0.19829059829059828" />
         <entry key="app/src/main/res/layout/activity_welcome_screen.xml" value="0.19829059829059828" />
+        <entry key="app/src/main/res/layout/calendar_view.xml" value="0.15" />
         <entry key="app/src/main/res/layout/custom_loading_dialog.xml" value="0.19829059829059828" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.24166666666666667" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.24166666666666667" />
@@ -24,14 +26,15 @@
         <entry key="app/src/main/res/layout/fragment_module__settings.xml" value="0.19829059829059828" />
         <entry key="app/src/main/res/layout/fragment_module__today.xml" value="0.2" />
         <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.24166666666666667" />
-        <entry key="app/src/main/res/layout/fragment_plant_care.xml" value="0.18675213675213675" />
+        <entry key="app/src/main/res/layout/fragment_plant_care.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_plant_info.xml" value="0.19829059829059828" />
         <entry key="app/src/main/res/layout/fragment_progress.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.24166666666666667" />
         <entry key="app/src/main/res/layout/fragment_sign_up.xml" value="0.25" />
         <entry key="app/src/main/res/layout/recycler_view_identify_plants.xml" value="0.2" />
         <entry key="app/src/main/res/layout/recycler_view_row.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/reset_password.xml" value="0.19829059829059828" />
+        <entry key="app/src/main/res/layout/reset_password.xml" value="0.17" />
+        <entry key="app/src/main/res/layout/time_view.xml" value="0.25" />
         <entry key="app/src/main/res/menu/bottom_nav.xml" value="0.24166666666666667" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.24166666666666667" />
         <entry key="app/src/main/res/xml/file_paths.xml" value="0.2510548523206751" />

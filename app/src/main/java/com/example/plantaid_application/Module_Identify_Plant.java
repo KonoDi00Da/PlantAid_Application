@@ -58,7 +58,6 @@ public class Module_Identify_Plant extends Fragment {
 
     private Button btnCamera, btnGallery, btnIdentify, btnSaveImage;
     private ImageView imgView;
-    private TextView filePath;
     private Bitmap imageBitmap;
     private final int REQUEST_IMAGE_CAPTURE = 1;
     private final int IMAGE_PICK_CODE = 1000;
@@ -95,7 +94,6 @@ public class Module_Identify_Plant extends Fragment {
         btnGallery = view.findViewById(R.id.btnGallery);
         btnIdentify = view.findViewById(R.id.btnIdentify);
         btnSaveImage = view.findViewById(R.id.btnSaveImage);
-        filePath = view.findViewById(R.id.imgPath);
         loadingDialog = new LoadingDialog(getActivity());
 
         firebaseStorage = FirebaseStorage.getInstance();
@@ -258,6 +256,7 @@ public class Module_Identify_Plant extends Fragment {
                         url = model.getIdImage();
                         loadingDialog.stopLoading();
                         toast("Plant added successfully");
+                        btnIdentify.setVisibility(View.VISIBLE);
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -403,17 +402,12 @@ public class Module_Identify_Plant extends Fragment {
     }
 
     private void identifyPlant() {
+
         String value = contentUri.toString();
         Intent intent = new Intent(getActivity(), Module_Identify_Plant_Organ.class);
         intent.putExtra("userPic", value);
         intent.putExtra("url", url);
         startActivity(intent);
-//        Fragment fragment = new Fragment();
-//        String key = "1";
-//        String value = uri.toString();
-//        Bundle bundle = new Bundle();
-//        bundle.putString(key,value);
-//        fragment.setArguments(bundle);
     }
 
     private void openGallery() {

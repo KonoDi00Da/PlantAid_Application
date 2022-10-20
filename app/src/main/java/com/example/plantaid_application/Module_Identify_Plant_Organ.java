@@ -24,18 +24,19 @@ public class Module_Identify_Plant_Organ extends AppCompatActivity {
 
         Intent intent = new Intent(this, Module_Identify_Plant_Result.class);
 
-
         imgPlant = findViewById(R.id.imgUserInput);
         btnLeaf = findViewById(R.id.btnLeaf);
         btnFlower = findViewById(R.id.btnFlower);
         btnFruit = findViewById(R.id.btnFruit);
         btnBark = findViewById(R.id.btnBark);
         String url = getIntent().getStringExtra("url");
+        String imagePic = getIntent().getStringExtra("userPic");
         intent.putExtra("serviceUrl", url);
+        intent.putExtra("imgPic", imagePic);
 
 
         // getting attached intent data
-        Picasso.get().load(getIntent().getStringExtra("userPic"))
+        Picasso.get().load(imagePic)
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .into(imgPlant);
 

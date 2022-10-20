@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import com.example.plantaid_application.Models.PlantIdentifyModel;
 import com.example.plantaid_application.Models.User_MyGarden_Adapter;
 import com.example.plantaid_application.Models.User_Plants;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,12 +48,14 @@ import java.util.List;
 
 public class Module_Identify_Plant_Result extends AppCompatActivity {
     private TextView txtPlantID;
+    private ImageView imgPlant;
     LoadingDialog loadingDialog;
     ArrayList<PlantIdentifyModel> list;
     private PlantIdResultsAdapter cAdapter;
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
+
 
     //if not plant then edi ende
 
@@ -71,6 +75,12 @@ public class Module_Identify_Plant_Result extends AppCompatActivity {
         recyclerView.setAdapter(cAdapter);
 
         txtPlantID = findViewById(R.id.txtPlantID);
+        String plantPic = getIntent().getStringExtra("imgPic");
+        imgPlant = findViewById(R.id.imgPlant);
+
+        Picasso.get().load(plantPic)
+                .placeholder(R.drawable.ic_launcher_foreground)
+                .into(imgPlant);
 
         showResults();
 
@@ -80,9 +90,8 @@ public class Module_Identify_Plant_Result extends AppCompatActivity {
 
     private void showResults() {
         try {
-//            loadingDialog.startLoading("Fetching Results...");
+            loadingDialog.startLoading("Fetching Results");
             String imgUrl = getIntent().getStringExtra("serviceUrl");
-            loadingDialog = new LoadingDialog(this);
 
             String afterEncode = URLEncoder.encode(imgUrl, "UTF-8");
             String api_key = "2b10UhsM38YnFCRm7pHO8zK";
@@ -96,7 +105,7 @@ public class Module_Identify_Plant_Result extends AppCompatActivity {
                 @Override
                 public void onResponse(JSONObject response) {
 //                    Log.d("response", "Response Check :" + response);
-//                    loadingDialog.stopLoading();
+                    loadingDialog.stopLoading();
                     try {
                         JSONArray results = response.getJSONArray("results");
                         for(int i = 0; i < results.length(); i++){
@@ -159,9 +168,7 @@ public class Module_Identify_Plant_Result extends AppCompatActivity {
                                     }
                                 }
                             }
-
                             model.setSciName(scientificName);
-
                             model.setFamily(family);
                             model.setScore(score);
                             list.add(model);
@@ -179,9 +186,9 @@ public class Module_Identify_Plant_Result extends AppCompatActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-//                    loadingDialog.stopLoading();
+                    loadingDialog.stopLoading();
                     if(error.getMessage() != null){
-                        toast("Failed to get data...");
+                        toast("Failed to get data");
                     }
                 }
             });

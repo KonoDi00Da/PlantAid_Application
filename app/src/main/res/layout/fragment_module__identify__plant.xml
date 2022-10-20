@@ -28,14 +28,6 @@
                 android:background="@color/teal_700"
                 android:src="@drawable/ic_launcher_foreground" />
 
-            <TextView
-                android:textIsSelectable="true"
-                android:layout_gravity="center"
-                android:id="@+id/imgPath"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="text" />
-
             <Button
                 android:id="@+id/btnGallery"
                 android:layout_gravity="center"
@@ -51,6 +43,7 @@
                 android:text="Camera" />
 
             <Button
+                android:visibility="gone"
                 android:id="@+id/btnIdentify"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
@@ -58,6 +51,7 @@
                 android:text="Identify" />
 
             <Button
+                android:visibility="gone"
                 android:id="@+id/btnSaveImage"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
