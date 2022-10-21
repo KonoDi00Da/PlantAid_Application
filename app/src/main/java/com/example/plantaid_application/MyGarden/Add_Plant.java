@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 
 import com.example.plantaid_application.Models.PlantListModel;
-import com.example.plantaid_application.Models.Plant_List_Adapter;
+import com.example.plantaid_application.Adapter.Plant_List_Adapter;
 import com.example.plantaid_application.Models.RecyclerViewInterface;
 import com.example.plantaid_application.R;
 import com.google.firebase.database.DataSnapshot;

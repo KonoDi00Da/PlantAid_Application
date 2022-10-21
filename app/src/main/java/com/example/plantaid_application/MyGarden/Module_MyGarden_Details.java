@@ -20,17 +20,23 @@ public class Module_MyGarden_Details extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager2 viewPager2;
     private TabLayoutAdapter tabLayoutAdapter;
-    public String plantKey, userKey;
+    public String plantKey, userKey, commonName;
+    private TextView textView35;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_module_my_garden_details);
         imageView = findViewById(R.id.imageView5);
+        textView35 = findViewById(R.id.textView12312);
 
         Intent intent = getIntent();
         plantKey = intent.getStringExtra("plantKey");
         userKey = intent.getStringExtra("userKey");
+        commonName = intent.getStringExtra("commonName");
+        textView35.setText(commonName);
+
+        String plantCom = commonName;
 
         Picasso.get().load(getIntent().getStringExtra("plant_image"))
                 .placeholder(R.drawable.ic_launcher_foreground)
@@ -38,6 +44,7 @@ public class Module_MyGarden_Details extends AppCompatActivity {
 
         tabLayout = findViewById(R.id.tab_layout);
         viewPager2 = findViewById(R.id.view_pager);
+
         tabLayoutAdapter = new TabLayoutAdapter(this);
         viewPager2.setAdapter(tabLayoutAdapter);
 
@@ -76,4 +83,6 @@ public class Module_MyGarden_Details extends AppCompatActivity {
     public String getUserKey() {
         return userKey;
     }
+
+    public String getCommonName() { return commonName; }
 }

@@ -47,7 +47,7 @@ public class Add_Plant_Details extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
     FirebaseDatabase database;
-    private static final String TAG = "MainActivity";
+
 
     //for Youtube View Embedding
 
@@ -114,7 +114,7 @@ public class Add_Plant_Details extends AppCompatActivity {
 
                 public WebResourceResponse shouldInterceptRequest(WebView view,
                                                                   WebResourceRequest request) {
-                    Log.d(TAG, "shouldOverrideUrlLoading: Url = [" + request.getUrl()+"]");
+                    Log.d("AddPlant", "shouldOverrideUrlLoading: Url = [" + request.getUrl()+"]");
                     this.view = view;
                     this.request = request;
                     return assetLoader.shouldInterceptRequest(request.getUrl());
@@ -141,7 +141,6 @@ public class Add_Plant_Details extends AppCompatActivity {
                     userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                             //get date added
                             String plantID = "myGarden";
                             String userPlantKey = userRef.push().getKey();

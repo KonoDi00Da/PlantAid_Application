@@ -1,4 +1,4 @@
-package com.example.plantaid_application.Models;
+package com.example.plantaid_application.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.plantaid_application.MyGarden.Add_Plant_Details;
+import com.example.plantaid_application.Models.User_Plants;
 import com.example.plantaid_application.MyGarden.Module_MyGarden_Details;
 import com.example.plantaid_application.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,14 +52,13 @@ public class User_MyGarden_Adapter extends RecyclerView.Adapter<User_MyGarden_Ad
         Picasso.get().load(model.getImage()).placeholder(R.drawable.ic_launcher_foreground).into(holder.imageView);
         holder.commonName.setText(model.getC_plantName());
         holder.sciName.setText(model.getS_plantName());
-        //holder.setListener((view, po))
-
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, Module_MyGarden_Details.class);
                 intent.putExtra("plant_image",model.getImage());
+                intent.putExtra("commonName",model.getC_plantName());
                 intent.putExtra("userKey",model.getUser_key());
                 intent.putExtra("plantKey",model.getKey());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

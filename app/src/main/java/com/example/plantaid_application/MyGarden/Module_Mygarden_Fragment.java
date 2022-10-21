@@ -18,10 +18,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.plantaid_application.Models.PlantListModel;
-import com.example.plantaid_application.Models.User_MyGarden_Adapter;
+import com.example.plantaid_application.Adapter.User_MyGarden_Adapter;
 import com.example.plantaid_application.Models.User_Plants;
-import com.example.plantaid_application.Models.User_Plants_RV;
 import com.example.plantaid_application.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,26 +31,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Module_Mygarden_Fragment extends Fragment {
-    Add_Plant_Details add_plant_details = new Add_Plant_Details();
 
     private FloatingActionButton floatingActionButton;
 
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
-    FirebaseDatabase database;
-    FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     private User_MyGarden_Adapter cAdapter;
 
     private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
     ArrayList<User_Plants> list = new ArrayList<>();
-    private int dataCount;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private CoordinatorLayout coordinatorLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -91,7 +81,7 @@ public class Module_Mygarden_Fragment extends Fragment {
             recyclerView.setAdapter(cAdapter);
 
             databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser.getUid()).child("myGarden");
-//            databaseReference.child("Users").keepSynced(true);
+            databaseReference.child("Users").keepSynced(true);
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {

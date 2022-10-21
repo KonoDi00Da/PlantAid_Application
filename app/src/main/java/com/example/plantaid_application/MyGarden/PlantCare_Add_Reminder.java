@@ -1,8 +1,11 @@
 package com.example.plantaid_application.MyGarden;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -12,77 +15,215 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.plantaid_application.Models.PlantReminderModel;
+import com.example.plantaid_application.Models.User_Plants;
 import com.example.plantaid_application.R;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointForward;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class PlantCare_Add_Reminder extends AppCompatActivity {
 
-    TextView txtComPlantName, txtTask, txtCalendarDate, txtTime;
-    EditText txtCustomTask;
-    FloatingActionButton btnBack, btnAdd;
-    Button btnOK, btnCancel;
+    private TextView txtComPlantName, txtTask, txtCalendarDate, txtTime;
+    private EditText edittxtCustomTask;
+    private FloatingActionButton btnBack, btnAdd;
+    private Button btnOK, btnCancel;
+
+    FirebaseAuth mAuth;
+    FirebaseUser currentUser;
+    FirebaseDatabase database;
+
+    private int hour, minute;
+
+    private String timeFormat,commonName, userKey, task, date, dateFormatted;
+
+    @TimeFormat  private int clockFormat;
+    @Nullable private Integer timeInputMode;
+
+    String customTask;
+    private final SimpleDateFormat formatter = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_care_add_reminder);
 
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        database = FirebaseDatabase.getInstance();
+
         txtComPlantName = findViewById(R.id.txtComPlantName);
-        txtTask = findViewById(R.id.txtTask);
-        txtCalendarDate = findViewById(R.id.txtCalendarDate);
-        txtTime = findViewById(R.id.txtTime);
-        txtCustomTask = findViewById(R.id.txtCustomTask);
-        btnBack = findViewById(R.id.btnBack);
-        btnAdd = findViewById(R.id.btnAdd);
+            txtTask = findViewById(R.id.txtTask);
+            txtCalendarDate = findViewById(R.id.txtCalendarDate);
+            txtTime = findViewById(R.id.txtTime);
+            edittxtCustomTask = findViewById(R.id.txtCustomTask);
+            btnBack = findViewById(R.id.btnBack);
+            btnAdd = findViewById(R.id.btnAdd);
 
-        String task = getIntent().getStringExtra("taskReminder");
+            String date_ = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(new Date());
+            date = new SimpleDateFormat("MMM_dd,_yyyy", Locale.getDefault()).format(new Date());
+            txtCalendarDate.setText(date_);
+            String timeFormat_ = "08:00 AM";
+            timeFormat = "08:00_AM";
+            txtTime.setText(timeFormat_);
 
-        if(task.equals("Custom")){
-            txtCustomTask.setVisibility(View.VISIBLE);
-        }else{
-            txtTask.setText(task);
-            txtTask.setVisibility(View.VISIBLE);
-        }
+            String userTask = getIntent().getStringExtra("taskReminder");
+            commonName = getIntent().getStringExtra("plantCommonName");
+            userKey = getIntent().getStringExtra("userKey");
 
-        btnBack.setOnClickListener(new View.OnClickListener() {
+            txtComPlantName.setText(commonName);
+
+            clockFormat = TimeFormat.CLOCK_12H;
+
+            if(userTask.equals("Custom")){
+                edittxtCustomTask.setVisibility(View.VISIBLE);
+                btnAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        customTask = edittxtCustomTask.getText().toString().trim();
+                        task = customTask;
+                        if (customTask.isEmpty()) {
+                            customTask = edittxtCustomTask.getText().toString().trim();
+                            edittxtCustomTask.setError("Text is required");
+                            edittxtCustomTask.requestFocus();
+                            return;
+                        }
+                        addToFirebase();
+                        finish();
+                    }
+                });
+            }else{
+                task = userTask;
+                txtTask.setText(task);
+                txtTask.setVisibility(View.VISIBLE);
+
+                btnAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        addToFirebase();
+                        finish();
+                    }
+                });
+            }
+
+            btnBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+
+            txtCalendarDate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    materialDatePicker();
+                }
+            });
+
+            txtTime.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setTime();
+                }
+            });
+    }
+
+    private void addToFirebase() {
+        DatabaseReference userRef = database.getReference("Users").child(currentUser.getUid());
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                finish();
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String plantID = "myGarden";
+                    String reminders = "plantReminders";
+                    String pushKey = userRef.push().getKey();
+                    PlantReminderModel plantReminderModel = new PlantReminderModel(commonName,task,date,timeFormat);
+                    userRef.child(plantID).child(userKey).child(reminders).child(pushKey).setValue(plantReminderModel);
+                    toast("Reminder is now set");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
-
-        txtCalendarDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openCalendar();
-            }
-        });
-
-        txtTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setTime();
-            }
-        });
-
 
     }
 
-    private void setTime() {
+    private void materialDatePicker(){
+        CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder().setValidator(DateValidatorPointForward.now());
 
+        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker().setCalendarConstraints(constraintBuilder.build());
+        builder.setSelection(MaterialDatePicker.todayInUtcMilliseconds());
+        final MaterialDatePicker materialDatePicker = builder.build();
+        materialDatePicker.show(getSupportFragmentManager(),"DATE_PICKER");
+
+        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+            @Override
+            public void onPositiveButtonClick(Object selection) {
+                date = materialDatePicker.getHeaderText().replace(" ","_");
+                txtCalendarDate.setText(materialDatePicker.getHeaderText());
+            }
+        });
+    }
+
+    private void setTime() {
+        MaterialTimePicker.Builder materialTimePickerBuilder = new MaterialTimePicker.Builder()
+                .setTimeFormat(clockFormat)
+                .setHour(hour)
+                .setMinute(minute);
+
+        if (timeInputMode != null) {
+            materialTimePickerBuilder.setInputMode(timeInputMode);
+        }
+
+        MaterialTimePicker materialTimePicker = materialTimePickerBuilder.build();
+        materialTimePicker.show(getSupportFragmentManager(), "TIME_PICKER");
+
+        materialTimePicker.addOnPositiveButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int newHour = materialTimePicker.getHour();
+                int newMinute = materialTimePicker.getMinute();
+                PlantCare_Add_Reminder.this.onTimeSet(newHour, newMinute);
+            }
+        });
+    }
+
+    private void onTimeSet(int newHour, int newMinute) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, newHour);
+        cal.set(Calendar.MINUTE, newMinute);
+        cal.setLenient(false);
+
+        String time = formatter.format(cal.getTime());
+        timeFormat = time.replace(" ","_");
+        txtTime.setText(time);
+        hour = newHour;
+        minute = newMinute;
     }
 
     private void openCalendar() {
         Dialog dialog = new Dialog(this);
-//        //We have added a title in the custom layout. So let's disable the default title.
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        //The user will be able to cancel the dialog bu clicking anywhere outside the dialog.
-//        dialog.setCancelable(true);
-//        //Mention the name of the layout of your custom dialog.
-//        dialog.setContentView(R.layout.calendar_view);
-//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
         dialog.setContentView(R.layout.calendar_view);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(true);
@@ -109,4 +250,9 @@ public class PlantCare_Add_Reminder extends AppCompatActivity {
 
         dialog.show();
     }
+
+    private void toast(String message){
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
 }

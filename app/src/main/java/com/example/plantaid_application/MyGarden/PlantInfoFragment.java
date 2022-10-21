@@ -1,5 +1,9 @@
 package com.example.plantaid_application.MyGarden;
 
+import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,9 +20,11 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.plantaid_application.MainHome;
 import com.example.plantaid_application.Models.PlantListModel;
 import com.example.plantaid_application.R;
 import com.example.plantaid_application.User;
@@ -34,11 +40,13 @@ import java.util.ArrayList;
 
 public class PlantInfoFragment extends Fragment {
     public String key;
+    private Button btnRemove;
     TextView commonNameTextView, sciNameTextView, descriptionTextView, txtWater, txtHarvest, txtCare, txtPestsDiseases;
     WebView webView;
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
     FirebaseDatabase database;
+
     //for Youtube View Embedding
 
     private String VideoEmbededAdress;
@@ -67,6 +75,7 @@ public class PlantInfoFragment extends Fragment {
 
         try {
 
+            btnRemove = view.findViewById(R.id.btnRemove);
             commonNameTextView = view.findViewById(R.id.txtCom_plant);
             sciNameTextView = view.findViewById(R.id.txtSci_plant);
             descriptionTextView = view.findViewById(R.id.plant_desc_);
@@ -80,6 +89,13 @@ public class PlantInfoFragment extends Fragment {
             mAuth = FirebaseAuth.getInstance();
             currentUser = mAuth.getCurrentUser();
             database = FirebaseDatabase.getInstance();
+
+            btnRemove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showDialog();
+                }
+            });
 
             DatabaseReference reference = database.getReference("Plants").child(plantKey);
             reference.addValueEventListener(new ValueEventListener() {
@@ -95,26 +111,66 @@ public class PlantInfoFragment extends Fragment {
                         txtCare.setText(model.getCare());
                         txtPestsDiseases.setText(model.getPestsDiseases());
                         youtubeView(model.getYtLink());
-
-                    }
-                    else{
-//                        userGreeting.setText("Hi there!");
                     }
                 }
-
                 @Override
                    public void onCancelled(@NonNull DatabaseError error) {
 
                 }
             });
 
-
-
-
         } catch (Exception e) {
             Log.v("TEST", "Error: " + e.toString());
         }
     }
+    private void showDialog() {
+        Dialog dialog = new Dialog(getActivity());
+        dialog.setContentView(R.layout.cardview_remove_plant);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        Button btnDelete = dialog.findViewById(R.id.btnDelete);
+        Button btnCancel = dialog.findViewById(R.id.btnCancel);
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deletePlant();
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+//                Toast.makeText(MainActivity.this, "Cancel clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void deletePlant() {
+        DatabaseReference userRef = database.getReference("Users").child(currentUser.getUid());
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String plantID = "myGarden";
+                userRef.child(plantID).child(userKey).removeValue();
+                toast("Plant Deleted");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        Intent myGarden = new Intent(getActivity(), MainHome.class);
+        startActivity(myGarden);
+    }
+
     private void youtubeView(String s){
         WebViewAssetLoader assetLoader = new WebViewAssetLoader.Builder()
                 .addPathHandler("/assets/", new WebViewAssetLoader.AssetsPathHandler(getActivity()))
