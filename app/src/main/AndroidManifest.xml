@@ -23,6 +23,13 @@
         android:theme="@style/Theme.PlantAid_Application"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".MyGarden.PlantCare_Edit_Reminder"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".MyGarden.PlantCare_Add_Reminder"
             android:exported="true" />
 
@@ -38,7 +45,7 @@
 
         <activity
             android:name=".Module_Identify_Plant_Result"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".Module_Identify_Plant_Organ"
             android:exported="true" />

@@ -1,6 +1,9 @@
 package com.example.plantaid_application.MyGarden;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,11 +17,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.plantaid_application.Adapter.ReminderPlant_Adapter;
 import com.example.plantaid_application.Adapter.User_MyGarden_Adapter;
+import com.example.plantaid_application.MainHome;
 import com.example.plantaid_application.Models.PlantReminderModel;
 import com.example.plantaid_application.Models.User_Plants;
 import com.example.plantaid_application.Module_Identify_Plant_Result;
@@ -42,6 +47,7 @@ public class PlantCareFragment extends Fragment {
     private FirebaseUser currentUser;
     private DatabaseReference databaseReference;
     private ReminderPlant_Adapter cAdapter;
+    FirebaseDatabase database;
 
     private RecyclerView recyclerView;
     ArrayList<PlantReminderModel> list = new ArrayList<>();
@@ -66,6 +72,7 @@ public class PlantCareFragment extends Fragment {
         cardFertilize = view.findViewById(R.id.cardFertilize);
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
+        database = FirebaseDatabase.getInstance();
 
         Intent intent = new Intent(getActivity(), PlantCare_Add_Reminder.class);
         intent.putExtra("plantCommonName", plantCommonName);
@@ -140,6 +147,7 @@ public class PlantCareFragment extends Fragment {
             Log.e("TEST", "Error: " + e.toString());
         }
     }
+
     private void toast(String message){
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }

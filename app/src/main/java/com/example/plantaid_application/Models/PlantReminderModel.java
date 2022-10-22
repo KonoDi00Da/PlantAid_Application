@@ -1,17 +1,35 @@
 package com.example.plantaid_application.Models;
 
 public class PlantReminderModel {
-    public String plantName, reminderType, date, time;
+    public String plantName, reminderType, date, time, userKey, reminderKey;
 
     public PlantReminderModel(){
 
     }
 
-    public PlantReminderModel(String plantName, String reminderType, String date, String time) {
+    public PlantReminderModel(String plantName, String reminderType, String date, String time, String userKey, String reminderKey) {
         this.plantName = plantName;
         this.reminderType = reminderType;
         this.date = date;
         this.time = time;
+        this.userKey = userKey;
+        this.reminderKey = reminderKey;
+    }
+
+    public String getUserKey() {
+        return userKey;
+    }
+
+    public void setUserKey(String userKey) {
+        this.userKey = userKey;
+    }
+
+    public String getReminderKey() {
+        return reminderKey;
+    }
+
+    public void setReminderKey(String reminderKey) {
+        this.reminderKey = reminderKey;
     }
 
     public String getPlantName() {

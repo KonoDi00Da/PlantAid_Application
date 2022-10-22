@@ -47,6 +47,7 @@ public class PlantCare_Add_Reminder extends AppCompatActivity {
     private EditText edittxtCustomTask;
     private FloatingActionButton btnBack, btnAdd;
     private Button btnOK, btnCancel;
+    String customTask;
 
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
@@ -59,7 +60,7 @@ public class PlantCare_Add_Reminder extends AppCompatActivity {
     @TimeFormat  private int clockFormat;
     @Nullable private Integer timeInputMode;
 
-    String customTask;
+
     private final SimpleDateFormat formatter = new SimpleDateFormat("hh:mm a", Locale.getDefault());
 
 
@@ -156,7 +157,7 @@ public class PlantCare_Add_Reminder extends AppCompatActivity {
                     String plantID = "myGarden";
                     String reminders = "plantReminders";
                     String pushKey = userRef.push().getKey();
-                    PlantReminderModel plantReminderModel = new PlantReminderModel(commonName,task,date,timeFormat);
+                    PlantReminderModel plantReminderModel = new PlantReminderModel(commonName,task,date,timeFormat, userKey, pushKey);
                     userRef.child(plantID).child(userKey).child(reminders).child(pushKey).setValue(plantReminderModel);
                     toast("Reminder is now set");
             }
@@ -222,6 +223,11 @@ public class PlantCare_Add_Reminder extends AppCompatActivity {
         minute = newMinute;
     }
 
+    private void toast(String message){
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+
     private void openCalendar() {
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.calendar_view);
@@ -251,8 +257,5 @@ public class PlantCare_Add_Reminder extends AppCompatActivity {
         dialog.show();
     }
 
-    private void toast(String message){
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
 
 }

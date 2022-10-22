@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.plantaid_application.Adapter.ReminderPlant_Adapter;
 import com.example.plantaid_application.Adapter.TabLayoutAdapter;
 import com.example.plantaid_application.R;
 import com.google.android.material.tabs.TabLayout;
@@ -21,20 +22,17 @@ public class Module_MyGarden_Details extends AppCompatActivity {
     private ViewPager2 viewPager2;
     private TabLayoutAdapter tabLayoutAdapter;
     public String plantKey, userKey, commonName;
-    private TextView textView35;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_module_my_garden_details);
         imageView = findViewById(R.id.imageView5);
-        textView35 = findViewById(R.id.textView12312);
 
         Intent intent = getIntent();
         plantKey = intent.getStringExtra("plantKey");
         userKey = intent.getStringExtra("userKey");
         commonName = intent.getStringExtra("commonName");
-        textView35.setText(commonName);
 
         String plantCom = commonName;
 
